@@ -12,7 +12,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import me.lunatk.custommapview.R
-import me.lunatk.custommapview.mapview.layer.Layer
+import me.lunatk.custommapview.layer.Layer
 import kotlin.math.PI
 
 class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {

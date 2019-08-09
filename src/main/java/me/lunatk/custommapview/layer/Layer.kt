@@ -1,4 +1,4 @@
-package me.lunatk.custommapview.mapview.layer
+package me.lunatk.custommapview.layer
 
 import android.graphics.Canvas
 import me.lunatk.custommapview.mapview.MapView

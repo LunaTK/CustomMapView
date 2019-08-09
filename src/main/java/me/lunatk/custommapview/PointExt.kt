@@ -2,7 +2,7 @@ package me.lunatk.custommapview.mapview
 
 import android.graphics.PointF
 import android.view.MotionEvent
-import me.lunatk.custommapview.mapview.layer.Layer
+import me.lunatk.custommapview.layer.Layer
 import kotlin.math.atan2
 
 fun PointF.copy(): PointF = PointF(this.x, this.y)
