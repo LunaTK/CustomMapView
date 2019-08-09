@@ -3,6 +3,8 @@ package me.lunatk.custommapview.mapview
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.drawable.toBitmap
 import me.lunatk.custommapview.R
 import me.lunatk.custommapview.layer.Layer
@@ -21,12 +24,13 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
     set(value) {
         field = value
         reset()
-//        Log.d("MapView", "(${mapImage?.width}, ${mapImage?.height})")
+        Log.i(javaClass.simpleName, "Image size : (${field?.width}, ${field?.height})")
     }
 
     private val paint: Paint = Paint()
     private val imageMatrix: Matrix = Matrix()
-    private val touchManager = TouchManager(2)
+    private val touchManager = TouchManager(2).apply { onLongTouch = ::onLongTouch }
+    private val vibrator: Vibrator by lazy { context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }
 
     val position: PointF by lazy {PointF(width/2f, height/2f)}
 
@@ -39,6 +43,8 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
     var zoomable = true
 
     private var layers: Set<Layer> = HashSet()
+
+    var onLongTouchListener: ((x: Float, y: Float) -> Unit)? = null
 
     constructor(context: Context, attrs: AttributeSet): super(context, attrs){
         with(context.obtainStyledAttributes(attrs, R.styleable.MapView)) {
@@ -87,7 +93,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
         mapImage?.let {
             updateImageMatrix()
             canvas.matrix = imageMatrix
-            canvas.drawBitmap(mapImage, 0f,0f, paint)
+            canvas.drawBitmap(it, 0f,0f, paint)
 
             layers.forEach { it.drawOnCanvas(canvas) }
         }
@@ -95,6 +101,9 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         touchManager.update(event)
+        if (touchManager.isLongTouch) {
+            return true
+        }
         val touchPointOnMap = toPositionOnMap(event.x, event.y)
 
         with (touchPointOnMap) {
@@ -103,15 +112,22 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
 
         when(touchManager.pressCount) {
             0 -> {
-                layers.forEach { it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode) }
+                layers.forEach {
+                    it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode)
+                }
             }
             1 -> {
                 val offset = touchManager.getDelta(0)
-                if (offset.length() > 2)
-                    position.offset(offset.x, offset.y)
-                layers.forEach { it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode) }
+                if (offset.length() < 3) {
+                    return true
+                }
+                position.offset(offset.x, offset.y)
+                layers.forEach {
+                    it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode)
+                }
             }
             2 -> {
+                //TODO: optimize view update
                 val current = touchManager.getVector(0, 1)
                 val previous = touchManager.getVectorPrevious(0, 1)
 
@@ -127,6 +143,22 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
         return true
     }
 
+    /**
+     * Callback function when long press.
+     * @param x x coordinate on screen.
+     * @param x y coordinate on screen
+     */
+    fun onLongTouch(event: MotionEvent) {
+        //TODO: invalidate following touch events
+        vibrator.vibrate(10)
+        with (toPositionOnMap(event.x, event.y)) {
+            Log.i(javaClass.simpleName, "onLongTouch (${x}, ${y})")
+            onLongTouchListener?.invoke(x, y)
+
+        }
+
+    }
+
     override fun onGlobalLayout() {
         position.set(width / 2f, height / 2f)
         viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -137,7 +169,9 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     fun setMapImage(@DrawableRes resId: Int) {
-        setMapImage(ContextCompat.getDrawable(context, resId))
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        mapImage = BitmapFactory.decodeResource(resources, resId, options)
     }
 
     fun addLayer(layer: Layer) {

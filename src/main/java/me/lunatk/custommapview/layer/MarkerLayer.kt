@@ -15,7 +15,9 @@ import kotlin.math.min
 class MarkerLayer: Layer() {
 
     private val markerImage: Bitmap by lazy {
-        ContextCompat.getDrawable(mapView?.context!!, R.drawable.marker)?.toBitmap()!!
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        BitmapFactory.decodeResource(mapView?.resources, R.drawable.marker, options)
     }
     private val matrix = Matrix()
     private val paint = Paint()
@@ -52,6 +54,7 @@ class MarkerLayer: Layer() {
 
     fun addMarker(marker: Marker) {
         markers += marker
+        mapView?.invalidate()
     }
 
     fun addMarker(x: Float, y: Float) {

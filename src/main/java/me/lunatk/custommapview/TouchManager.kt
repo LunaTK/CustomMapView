@@ -1,6 +1,7 @@
 package me.lunatk.custommapview.mapview
 
 import android.graphics.PointF
+import android.util.Log
 import android.view.MotionEvent
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
@@ -13,6 +14,14 @@ class TouchManager {
 
     val pressCount get() = points.count { it != null }
     var actionCode: Int = 0
+    private set
+
+    var isLongTouch = false
+    var lastTouchTime: Long? = null
+    private set
+    private var touchDownPoint: PointF? = null
+
+    var onLongTouch: ((event: MotionEvent) -> Unit)? = null
 
     constructor(maxNumOfTouch: Int) {
         this.maxNumOfTouch = maxNumOfTouch
@@ -50,8 +59,38 @@ class TouchManager {
         }
     }
 
+    private fun checkLongTouch(event: MotionEvent) {
+        isLongTouch = false
+        when(actionCode) {
+            MotionEvent.ACTION_DOWN -> {
+                lastTouchTime = System.currentTimeMillis()
+                touchDownPoint = PointF(event.x, event.y)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                touchDownPoint?.let {
+                    if ((it - PointF(event.x, event.y)).length() > 20) {
+                        lastTouchTime = null
+                        touchDownPoint = null
+                    } else if (elapsedTouchTime > 500) { // Long Touch
+                        onLongTouch?.invoke(event)
+                        lastTouchTime = null
+                        touchDownPoint = null
+                        isLongTouch = true
+                    }
+                }
+            }
+            else -> {
+                lastTouchTime = null
+                touchDownPoint = null
+            }
+        }
+    }
+
+    private val elapsedTouchTime: Long get() = System.currentTimeMillis() - (lastTouchTime ?: 0L)
+
     fun update(event: MotionEvent) {
         actionCode = event.action and MotionEvent.ACTION_MASK
+        checkLongTouch(event)
 
         if (actionCode == MotionEvent.ACTION_POINTER_UP || actionCode == MotionEvent.ACTION_UP) {
             val index = event.action shr MotionEvent.ACTION_POINTER_ID_SHIFT
