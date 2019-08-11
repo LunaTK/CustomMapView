@@ -8,8 +8,8 @@ import androidx.core.graphics.minus
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withSave
 import me.lunatk.custommapview.R
-import me.lunatk.custommapview.mapview.toDegree
-import me.lunatk.custommapview.mapview.toPositionOnScreen
+import me.lunatk.custommapview.toDegree
+import me.lunatk.custommapview.toPositionOnScreen
 import kotlin.math.min
 
 class MarkerLayer: Layer() {

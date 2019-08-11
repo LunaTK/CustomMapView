@@ -1,4 +1,4 @@
-package me.lunatk.custommapview.mapview
+package me.lunatk.custommapview
 
 import android.content.Context
 import android.graphics.*

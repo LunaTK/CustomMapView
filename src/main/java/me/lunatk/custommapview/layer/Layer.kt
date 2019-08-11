@@ -1,7 +1,7 @@
 package me.lunatk.custommapview.layer
 
 import android.graphics.Canvas
-import me.lunatk.custommapview.mapview.MapView
+import me.lunatk.custommapview.MapView
 
 abstract class Layer {
 
