@@ -1,6 +1,12 @@
 # CustomMapView
 Custom map view for Android
 
+# Features
+* Rotate
+* Zoom
+* Scale
+* Add Marker
+
 # License
 [MIT License](LICENSE.md)
 
