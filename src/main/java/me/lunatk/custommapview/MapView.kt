@@ -151,13 +151,11 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
      */
     fun onLongTouch(event: MotionEvent) {
         //TODO: invalidate following touch events
-        vibrator.vibrate(10)
-        with (toPositionOnMap(event.x, event.y)) {
+        onLongTouchListener?.let { listener ->
+            vibrator.vibrate(10)
             logi("onLongTouch (${x}, ${y})")
-            onLongTouchListener?.invoke(x, y)
-
+            toPositionOnMap(event.x, event.y).apply { listener(x, y) }
         }
-
     }
 
     override fun onGlobalLayout() {
