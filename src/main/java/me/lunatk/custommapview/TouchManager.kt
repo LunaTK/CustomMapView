@@ -1,7 +1,6 @@
 package me.lunatk.custommapview
 
 import android.graphics.PointF
-import android.util.Log
 import android.view.MotionEvent
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus

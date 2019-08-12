@@ -2,14 +2,9 @@ package me.lunatk.custommapview.layer
 
 import android.graphics.*
 import android.view.MotionEvent
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.minus
-import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withSave
 import me.lunatk.custommapview.R
-import me.lunatk.custommapview.toDegree
-import me.lunatk.custommapview.toPositionOnScreen
 import kotlin.math.min
 
 class MarkerLayer: Layer() {

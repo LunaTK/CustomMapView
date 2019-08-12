@@ -3,18 +3,13 @@ package me.lunatk.custommapview
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.drawable.toBitmap
-import me.lunatk.custommapview.R
 import me.lunatk.custommapview.layer.Layer
 import me.lunatk.custommapview.util.logi
 import kotlin.math.PI
@@ -149,6 +144,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
      * @param x x coordinate on screen.
      * @param x y coordinate on screen
      */
+    @Suppress("DEPRECATION")
     fun onLongTouch(event: MotionEvent) {
         //TODO: invalidate following touch events
         onLongTouchListener?.let { listener ->
