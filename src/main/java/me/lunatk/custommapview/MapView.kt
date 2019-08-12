@@ -16,6 +16,7 @@ import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.drawable.toBitmap
 import me.lunatk.custommapview.R
 import me.lunatk.custommapview.layer.Layer
+import me.lunatk.custommapview.util.logi
 import kotlin.math.PI
 
 class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
@@ -24,7 +25,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
     set(value) {
         field = value
         reset()
-        Log.i(javaClass.simpleName, "Image size : (${field?.width}, ${field?.height})")
+        logi("Image size : (${field?.width}, ${field?.height})")
     }
 
     private val paint: Paint = Paint()
@@ -107,7 +108,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
         val touchPointOnMap = toPositionOnMap(event.x, event.y)
 
         with (touchPointOnMap) {
-            Log.i(javaClass.simpleName, "(${x}, ${y})")
+            logi("(${x}, ${y})")
         }
 
         when(touchManager.pressCount) {
@@ -152,7 +153,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
         //TODO: invalidate following touch events
         vibrator.vibrate(10)
         with (toPositionOnMap(event.x, event.y)) {
-            Log.i(javaClass.simpleName, "onLongTouch (${x}, ${y})")
+            logi("onLongTouch (${x}, ${y})")
             onLongTouchListener?.invoke(x, y)
 
         }
