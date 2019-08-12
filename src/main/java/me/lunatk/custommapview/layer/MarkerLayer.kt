@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import androidx.core.graphics.minus
 import androidx.core.graphics.withSave
 import me.lunatk.custommapview.R
+import me.lunatk.custommapview.data.Marker
 import kotlin.math.min
 
 class MarkerLayer: Layer() {

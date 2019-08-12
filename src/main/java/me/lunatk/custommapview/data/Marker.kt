@@ -1,4 +1,4 @@
-package me.lunatk.custommapview.layer
+package me.lunatk.custommapview.data
 
 import android.graphics.PointF
 
