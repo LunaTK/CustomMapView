@@ -1,4 +1,4 @@
-package me.lunatk.custommapview
+package me.lunatk.custommapview.util
 
 import android.graphics.PointF
 import android.view.MotionEvent

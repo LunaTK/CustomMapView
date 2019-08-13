@@ -1,10 +1,11 @@
 package me.lunatk.custommapview.layer
 
 import android.graphics.*
+import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withSave
 import me.lunatk.custommapview.R
 import me.lunatk.custommapview.data.CurrentLocationProvider
-import me.lunatk.custommapview.data.Location
+import me.lunatk.custommapview.util.drawBitmapCentered
 
 class CurrentLocationLayer: Layer() {
 
@@ -25,14 +26,9 @@ class CurrentLocationLayer: Layer() {
                 val point = floatArrayOf(lp.getLocation().x, lp.getLocation().y)
                 canvas.matrix.mapPoints(point)
 
-                matrix.reset()
-                matrix.postTranslate(- locationImage.width / 2f, - locationImage.height / 2f)
-
                 canvas.withSave {
-                    matrix.reset()
                     matrix = this@CurrentLocationLayer.matrix
-
-                    canvas.drawBitmap(locationImage, point[0], point[1], paint)
+                    canvas.drawBitmapCentered(locationImage, point[0], point[1], paint)
                 }
             }
         }

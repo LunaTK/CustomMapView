@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver
 import androidx.annotation.DrawableRes
 import androidx.core.graphics.drawable.toBitmap
 import me.lunatk.custommapview.layer.Layer
+import me.lunatk.custommapview.util.getSignedAngleBetween
 import me.lunatk.custommapview.util.logi
 import kotlin.math.PI
 
@@ -109,7 +110,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
         when(touchManager.pressCount) {
             0 -> {
                 layers.forEach {
-                    it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode)
+                    it.onTouch(event.x, event.y, touchManager.actionCode)
                 }
             }
             1 -> {
@@ -119,7 +120,7 @@ class MapView: View, ViewTreeObserver.OnGlobalLayoutListener {
                 }
                 position.offset(offset.x, offset.y)
                 layers.forEach {
-                    it.onTouch(touchPointOnMap.x, touchPointOnMap.y, touchManager.actionCode)
+                    it.onTouch(event.x, event.y, touchManager.actionCode)
                 }
             }
             2 -> {

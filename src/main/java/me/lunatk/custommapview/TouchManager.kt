@@ -4,6 +4,9 @@ import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
+import me.lunatk.custommapview.util.copy
+import me.lunatk.custommapview.util.div
+import me.lunatk.custommapview.util.getPoint
 
 class TouchManager {
     private val maxNumOfTouch: Int
