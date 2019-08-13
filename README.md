@@ -6,6 +6,7 @@ Custom map view for Android
 * Zoom
 * Scale
 * Add Marker
+* Marker Detail
 
 # License
 [MIT License](LICENSE.md)
